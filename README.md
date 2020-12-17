@@ -11,3 +11,10 @@ Order in which i wrote the code:
 7) Loops
 8) Functions
 9) Pointers
+
+TODO:
+10) structure/typedef/union
+11) Data structures
+12) Multiple files
+13) Some project
+14) Look at github C code by other people
