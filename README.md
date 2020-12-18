@@ -12,10 +12,6 @@ Order in which i wrote the code:
 8) Functions
 9) Pointers
 10) Malloc
-11) Structure
-
-TODO:
-1) Data structures
-2) Multiple files
-3) Some project
-4) Look at github C code by other people
+11) Structs
+12) SomeLinkedList
+13) TGAMandelbrot
