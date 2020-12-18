@@ -97,27 +97,20 @@ struct color mandelbrot(float x, float y) {
 }
 
 struct color pallette(int i, float abs_z) {
+	/* apparently define replaces matching
+	   tokens and not matching substrings,
+	   so a is kinda feels like a variable in this case*/
+	#define A 0.25
 	struct color pixel;
 	float li;
 	
 	li = (float) (i + 1);
 	li -= log(0.5 * log(abs_z)) / 0.69314718;
-	li = fmod(li, 12) / 2;
-	if (li > 3) li = 6 - li; // makes it pongs
 	
-	if (li < 1) {
-		pixel.R = 0;
-		pixel.G = (char) (255*fmod(li, 1));
-		pixel.B = (char) (255 - 255*fmod(li, 1));
-	} else if (li < 2) {
-		pixel.R = (char) (255*fmod(li, 1));
-		pixel.G = (char) (255 - 255*fmod(li, 1));
-		pixel.B = 0;
-	} else {
-		pixel.R = (char) (255 - 255*fmod(li, 1));
-		pixel.G = 0;
-		pixel.B = (char) (255*fmod(li, 1));
-	}
+	pixel.R = (char) (255 * (cos(li*A)*0.5 + 0.5));
+	pixel.G = (char) (255 * (cos(li*A+2)*0.5 + 0.5));
+	pixel.B = (char) (255 * (cos(li*A+4)*0.5 + 0.5));
 	
 	return pixel;
+	#undef A
 }
