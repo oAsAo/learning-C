@@ -25,29 +25,42 @@ void draw_line(struct image pic, struct color colour, int x1, int y1, int x2, in
 int main(int argc, char **argv)
 {
 	int i, j;
+	float x, y, x2, y2;
 	struct color black;
-	//struct color white;
-	//struct color red;
-	struct color green;
-	//struct color blue;
-	black.r =   0; black.g =   0; black.b =   0;
-	//white.r = 255; white.g = 255; white.b = 255;
-	//red.r =   255;   red.g =   0;   red.b =   0;
-	green.r =   0; green.g = 255; green.b =   0;
-	//blue.r =    0;  blue.g =   0;  blue.b = 255;
+	struct color colour;
+	struct color border;
+	border.r = 160; border.g = 160; border.b = 0;
+	black.r = 15; black.g = 0; black.b = 50;
 	
 	struct image pic = new_image(FULLPATH, WIDTH, HEIGHT);
 	
 	// fill screen black
-	for (i=0; i<1920; i++) {
-		for (j=0; j<1080; j++) {
-			pic.array[i + 1920*j] = black;
+	for (i=0; i<WIDTH; i++) {
+		for (j=0; j<HEIGHT; j++) {
+			pic.array[i + WIDTH*j] = black;
 		}
 	}
-	draw_line(pic, green, 300, 300, 300, 800);
-	draw_line(pic, green, 300, 300, 800, 300);
-	draw_line(pic, green, 800, 800, 800, 300);
-	draw_line(pic, green, 800, 800, 300, 800);
+	
+	#define KF 255
+	for (i = 1; i<KF; i++) {
+		j = i * 2;
+		x = 500*sin(((float) i) / KF * M_PI * 2) + (WIDTH >> 1);
+		y = (HEIGHT >> 1) - 500*cos(((float) i) / KF * M_PI * 2);
+		x2 = 500*sin(((float) j) / KF * M_PI * 2) + (WIDTH >> 1);
+		y2 = (HEIGHT >> 1) - 500*cos(((float) j) / KF * M_PI * 2);
+		
+		colour.r = i; colour.g = 30; colour.b = KF-i;
+		
+		draw_line(pic, colour, (int) x, (int) y, (int) x2, (int) y2);
+	}
+	#undef KF
+	
+	for (i = 500; i < 507; i++) {
+		draw_line(pic, border, (WIDTH >> 1)+i, (HEIGHT >> 1)-i, (WIDTH >> 1)+i, (HEIGHT >> 1)+i);
+		draw_line(pic, border, (WIDTH >> 1)-i, (HEIGHT >> 1)-i, (WIDTH >> 1)-i, (HEIGHT >> 1)+i);
+		draw_line(pic, border, (WIDTH >> 1)-i, (HEIGHT >> 1)+i, (WIDTH >> 1)+i, (HEIGHT >> 1)+i);
+		draw_line(pic, border, (WIDTH >> 1)-i, (HEIGHT >> 1)-i, (WIDTH >> 1)+i, (HEIGHT >> 1)-i);
+	}
 	
 	close_image(pic);
 	return 0;
@@ -134,7 +147,7 @@ void draw_line(struct image pic, struct color colour, int x1, int y1, int x2, in
 	   (if iterating over x, else smallest of y-s)
 	   by exchanging values if necessary */
 	if (((x2 < x1) && (abs(x1 - x2) > abs(y1 - y2)))
-			|| (y2 < y1)) {
+			|| ((y2 < y1) && (abs(y1 - y2) >= abs(x1 - x2)))) {
 		x1 = x1 + x2;
 		x2 = x1 - x2;
 		x1 = x1 - x2;
